@@ -14,13 +14,15 @@ public class AvatarDefinition
         left,
         right
     }
+
+    public event Action<Texture2D> avatarLoaded;
     public string name;
     public string url;
     
     [JsonConverter(typeof(StringEnumConverter))]
     public Position position;
     
-    public Texture2D texture;
+    public Texture2D Texture { get; private set; }
     private bool isLoading;
     
     
@@ -49,6 +51,8 @@ public class AvatarDefinition
         isLoading = false;
         
         if (request.result == UnityWebRequest.Result.Success)
-             texture = DownloadHandlerTexture.GetContent(request);
+             Texture = DownloadHandlerTexture.GetContent(request);
+        
+        avatarLoaded?.Invoke(Texture);
     }
 }

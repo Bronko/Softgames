@@ -45,7 +45,7 @@ public class CardStackAnimationThingy : AnimationThingy
             var isEndIndex = IsEndIndex();
             SetTrigger(CardTrigger, () =>
             {
-                isPaused = false; //todo: Message, then = isEndIndex;
+                isPaused = isEndIndex;
                 CardStacks.OnCardMoved(isEndIndex);
             });
             if (isEndIndex)

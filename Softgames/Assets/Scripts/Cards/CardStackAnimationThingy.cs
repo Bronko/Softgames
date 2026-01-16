@@ -8,6 +8,7 @@ public class CardStackAnimationThingy : AnimationThingy
     private static readonly string CardTrigger = "Go";  
     public CardsStacks CardStacks;
     public float SequenceStepTime;
+    public Transform MoveUpTarget;
     
     private int index = 0;
 
@@ -67,14 +68,14 @@ public class CardStackAnimationThingy : AnimationThingy
         {
             var seq = DOTween.Sequence();
             var card = CardStacks.Cards[index];
-            card.transform.SetParent(toStack, true);
             var cardBasePos = card.transform.position;
+            card.transform.SetParent(toStack, true);
             var targetLayer = iterationDirection < 0 ? (CardStacks.Cards.Count - 1 - index) : index;
             var endTargetZ = -targetLayer;
             var targetPos = new Vector3(0, CardStacks.StackYStep * targetLayer, -200);
             var rotateByEulers = new Vector3(0, 0, CardStacks.RotationStep * iterationDirection);
             
-            seq.Append(card.DOMove(new Vector3(0, cardBasePos.y + 250, cardBasePos.z -50), SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Append(card.DOLocalMove(toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(card.DOScale(2f, SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Append(card.DOLocalMove(targetPos, SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(card.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InSine);

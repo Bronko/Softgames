@@ -1135,13 +1135,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AceOfShadows
   RectTransform: {fileID: 7351451562178763914}
-  Name: Cards
+  Name: 
+  CardAmount: 4
   CardPrefab: {fileID: 7724414970868229450}
   CardSprite: {fileID: 21300000, guid: 305484984bbbd564683814ef85f70c7d, type: 3}
   DistanceFromCamera: 1000
   StackOne: {fileID: 4465710534794260031}
-  StackTwo: {fileID: 0}
+  StackTwo: {fileID: 7540846296578870324}
   Padding: 200
+  RotationStep: -3
+  StackYStep: 2
+  Cards: []
 --- !u!1 &4167747540539501621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1366,6 +1370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7351451562178763914}
   - component: {fileID: 2701137010321523751}
+  - component: {fileID: 8282942194624869817}
   m_Layer: 0
   m_Name: Cards
   m_TagString: Untagged
@@ -1373,6 +1378,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8282942194624869817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8282942194624869816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc647125a6504217a9cb3a9243154468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardStackAnimationThingy
+  CardStacks: {fileID: 2701137010321523751}
+  SequenceStepTime: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

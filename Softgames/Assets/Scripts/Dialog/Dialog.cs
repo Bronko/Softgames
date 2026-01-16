@@ -33,7 +33,7 @@ public class Dialog : AssignmentScreen
         await LoadJsonAsync();
     }
 
-    private bool first = true;
+    private bool debugFail = false;
     private async Task LoadJsonAsync()
     {
         var request = UnityWebRequest.Get(MagicWordsUrl);
@@ -45,9 +45,9 @@ public class Dialog : AssignmentScreen
 
         Loading.SetActive(false);
         
-        if (first | request.result != UnityWebRequest.Result.Success)
+        if (debugFail || request.result != UnityWebRequest.Result.Success)
         {
-            first = false;
+            debugFail = false;
             NoLoad.SetActive(true);
         }
         else

@@ -70,14 +70,16 @@ public class CardStackAnimationThingy : AnimationThingy
             card.transform.SetParent(toStack, true);
             var cardBasePos = card.transform.position;
             var targetLayer = iterationDirection < 0 ? (CardStacks.Cards.Count - 1 - index) : index;
-            var targetPos = new Vector3(0, CardStacks.StackYStep * targetLayer, - targetLayer);
+            var endTargetZ = -targetLayer;
+            var targetPos = new Vector3(0, CardStacks.StackYStep * targetLayer, -200);
             var rotateByEulers = new Vector3(0, 0, CardStacks.RotationStep * iterationDirection);
             
             seq.Append(card.DOMove(new Vector3(0, cardBasePos.y + 250, cardBasePos.z -50), SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(card.DOScale(2f, SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Append(card.DOLocalMove(targetPos, SequenceStepTime)).SetEase(Ease.InOutSine);
-            seq.Join(card.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InOutSine);
-            seq.Join(card.DOLocalRotate(rotateByEulers, SequenceStepTime,  RotateMode.LocalAxisAdd)).SetEase(Ease.InOutSine);
+            seq.Join(card.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InSine);
+            seq.Join(card.DOLocalRotate(rotateByEulers, SequenceStepTime,  RotateMode.LocalAxisAdd)).SetEase(Ease.InSine);
+            seq.AppendCallback(() => card.localPosition = new Vector3(targetPos.x, targetPos.y, endTargetZ));
             AddTween(seq, callback);
         }
     }

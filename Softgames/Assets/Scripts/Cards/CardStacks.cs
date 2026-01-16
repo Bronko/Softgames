@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,6 +15,10 @@ public class CardsStacks : AssignmentScreen
     
     public Transform StackOne;
     public Transform StackTwo;
+    
+    public TMP_Text Counter1;
+    public TMP_Text Counter2;
+    
     public float Padding = 200;
     public float RotationStep = -3;
     public float StackYStep = 2;
@@ -24,6 +29,8 @@ public class CardsStacks : AssignmentScreen
     
     void Awake()
     {
+        Counter1.text = CardAmount.ToString();
+        Counter2.text = 0.ToString();
         for (int i = 0; i < CardAmount; i++)
         {
             var card = Instantiate(CardPrefab, StackOne);
@@ -37,9 +44,9 @@ public class CardsStacks : AssignmentScreen
 
     public async void OnCardMoved(bool endReached)
     {
-        Debug.Log("CardMoved");
-        //Todo: Counters
-
+        Counter1.text = StackOne.childCount.ToString();
+        Counter2.text = StackTwo.childCount.ToString();
+        
         if (endReached)
         {
             await Message.Show("All the ladybugs have travelled to their other stack!\n\n" +

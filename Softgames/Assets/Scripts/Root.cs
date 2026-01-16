@@ -22,7 +22,7 @@ namespace DefaultNamespace
             Assert.IsTrue(StartIndex < Screens.Count);
             Navigation.leftPressed += () => MoveScreens(-1);
             Navigation.rightPressed += () => MoveScreens(1);
-            SetUpScreenMatch();
+           // SetUpScreenMatch();
             SetupScreens();
         }
 
@@ -107,7 +107,7 @@ namespace DefaultNamespace
 
         void Update()
         {
-            SetUpScreenMatch();
+            //SetUpScreenMatch();
         }
     }
 }

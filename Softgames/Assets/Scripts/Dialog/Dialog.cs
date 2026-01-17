@@ -63,7 +63,9 @@ public class Dialog : AssignmentScreen
                "word with design to actually use damn Unicode, after the assignment already even mentioned it. <sprite name =\"intrigued\">\n" +
                "Depending on the actual use case and time constraints, I would go for a third party plugin," +
                "or dive deep to dynamically fill a system rendered emoji atlas. I have seen that done," +
-               "but it took a year for the developer to remove all the kinks.";
+               "but it took a year for the developer to remove all the kinks.\n" +
+               "\n" +
+               "To improve: Use nicer emoji";
     }
 }
 

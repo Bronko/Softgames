@@ -11,10 +11,12 @@ namespace DefaultNamespace
     {
         public Navigation Navigation;
         public RectTransform ScreensRoot;
-        public int StartIndex = 1;
         public List<AssignmentScreen> Screens;
+        public int StartIndex = 1; //The screen to show first
+        
         private int currentIndex;
         private bool isMoving;
+        
         AssignmentScreen Left => Screens[(currentIndex - 1).TrueModulo(Screens.Count)]; 
         AssignmentScreen Right => Screens[(currentIndex + 1).TrueModulo(Screens.Count)];
         AssignmentScreen Current => Screens[(currentIndex).TrueModulo(Screens.Count)];
@@ -50,11 +52,11 @@ namespace DefaultNamespace
                 isMoving = false;
             });
         }
-
+        
         private void PrepareTarget(AssignmentScreen target, float width)
         {
             target.gameObject.SetActive(true);
-            target.RectTransform.sizeDelta = new Vector2(width, target.RectTransform.sizeDelta.y);
+            target.RectTransform.sizeDelta = new Vector2(width, target.RectTransform.sizeDelta.y); //For if the aspect ratio changed. A bit overkill I guess. But it helped debugging.
         }
 
         private void SetupScreens()
@@ -71,12 +73,19 @@ namespace DefaultNamespace
             Navigation.ScreenName.text = Screens[currentIndex].Name;
         }
         
+        /// <summary>
+        /// Using rect transform anchors and pivot to attach the screen to the left of the frustum
+        /// </summary>
         private void PutLeft(RectTransform target)
         {
             target.anchorMin = Vector2.zero;
             target.anchorMax = new Vector2(0, 1);
             target.pivot = new Vector2(1, 0.5f);
         }
+        
+        /// <summary>
+        /// Using rect transform anchors and pivot to attach the screen to the right of the frustum
+        /// </summary>
         private void PutRight(RectTransform target)
         {
             target.anchorMin = new Vector2(1, 0);
@@ -84,6 +93,9 @@ namespace DefaultNamespace
             target.pivot = new Vector2(0, 0.5f);
         }
         
+        /// <summary>
+        /// Setting the rect transform anchors and pivot to stretch to the full parent, in this case, the whole screen.
+        /// </summary>
         private void PutCenter(RectTransform target)
         {
             target.anchorMin = Vector2.zero;

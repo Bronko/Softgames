@@ -16,9 +16,9 @@ public class AvatarDefinition
     }
 
     public event Action<Texture2D> avatarLoaded;
+    
     public string name;
     public string url;
-    
     [JsonConverter(typeof(StringEnumConverter))]
     public Position position;
     
@@ -27,7 +27,7 @@ public class AvatarDefinition
     
     
     [OnDeserialized]
-    internal void OnDeserialized(StreamingContext context)
+    private void OnDeserialized(StreamingContext context)
     {
         TryLoadTexture();
     }

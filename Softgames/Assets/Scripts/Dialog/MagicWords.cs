@@ -12,7 +12,7 @@ public class MagicWords
     public Dictionary<string, AvatarDefinition> Avatars = new();
     
     [OnDeserialized]
-    internal void OnDeserialized(StreamingContext context)
+    private void OnDeserialized(StreamingContext context)
     {
         foreach (var definition in avatars)
         {
@@ -22,7 +22,7 @@ public class MagicWords
                 Avatars[definition.name] = definition; 
                 //I would usually take the first definition, but the second Sheldon 
                 //is nicer.
-                //Of course I could try all definitions, to find the first one not broken.
+                //Of course, I could try all definitions to find the first one not broken.
                 //In a real life scenario I would advice against that kind of complexity.
             }
         }

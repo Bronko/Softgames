@@ -4,31 +4,29 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Dialog : AssignmentScreen
 {
     private static readonly string MagicWordsUrl =
         "https://private-624120-softgamesassignment.apiary-mock.com/v3/magicwords";
-
-
-    public GameObject Loading;
-    public GameObject NoLoad;
+    
+    public GameObject LoadingObj;
+    public GameObject NotLoadedPanel;
     public DialogPanel DialogPanel;
     public Button RetryButton;
-  
     
     void Awake()
     {
         RetryButton.onClick.AddListener(TryLoadJson);
-        
         TryLoadJson();
     }
 
     private async void TryLoadJson()
     {
-        Loading.SetActive(true);
-        NoLoad.SetActive(false);
+        LoadingObj.SetActive(true);
+        NotLoadedPanel.SetActive(false);
         DialogPanel.gameObject.SetActive(false);
         await LoadJsonAsync();
     }
@@ -43,12 +41,12 @@ public class Dialog : AssignmentScreen
         while (!operation.isDone)
             await Task.Yield();
 
-        Loading.SetActive(false);
+        LoadingObj.SetActive(false);
         
         if (debugFail || request.result != UnityWebRequest.Result.Success)
         {
             debugFail = false;
-            NoLoad.SetActive(true);
+            NotLoadedPanel.SetActive(true);
         }
         else
         {

@@ -1,21 +1,22 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class DialogPanel : MonoBehaviour
 {
     public float AvatarDistanceWall = 75;
-    public float TextDistanceWall = 60;
+    public float TextDistanceWall = 75;
     public float TextDistanceWallAvatarOffset = 200;
     
     public RectTransform AvatarBox;
     public RawImage AvatarImage;
-    public Texture2D NotLoaded;
-    public TMP_Text Text;
+    public Texture2D TextureNotLoaded;
+    public TMP_Text DialogText;
     public TMP_Text NameText;
     
-    private int currentIndex = 0;
-    private MagicWords parsedDialog;
+    private int currentIndex;
+    private MagicWords parsedDialogData;
     private AvatarDefinition currentAvatar;
     
     public Button ConfirmButton;
@@ -26,13 +27,13 @@ public class DialogPanel : MonoBehaviour
     }
     private void OnConfirmed()
     {
-        currentIndex = (currentIndex + 1) % parsedDialog.dialogue.Count;
+        currentIndex = (currentIndex + 1).TrueModulo(parsedDialogData.dialogue.Count);
         ShowPage();
     }
 
     public void Display(MagicWords dialog)
     {
-        parsedDialog = dialog;
+        parsedDialogData = dialog;
         ShowPage();
     }
 
@@ -40,13 +41,22 @@ public class DialogPanel : MonoBehaviour
     {
         if (currentAvatar != null)
             currentAvatar.avatarLoaded -= OnAvatarLoaded;
-        if (parsedDialog.Avatars.TryGetValue(parsedDialog.dialogue[currentIndex].name, out var avatarDefinition))
+        
+        HandleAvatarData();
+        
+        SetTexts();
+        UpdateLayout();
+    }
+
+    private void HandleAvatarData()
+    {
+        if (parsedDialogData.Avatars.TryGetValue(parsedDialogData.dialogue[currentIndex].name, out var avatarDefinition))
         {
             currentAvatar = avatarDefinition;
             if (currentAvatar.Texture == null)
             {
                 currentAvatar.avatarLoaded += OnAvatarLoaded;
-                AvatarImage.texture = NotLoaded;
+                AvatarImage.texture = TextureNotLoaded;
             }
             else
             {
@@ -55,20 +65,24 @@ public class DialogPanel : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"No avatar definition found for {parsedDialog.dialogue[currentIndex].name}");
+            Debug.LogWarning($"No avatar definition found for {parsedDialogData.dialogue[currentIndex].name}");
             currentAvatar = null;
-            AvatarImage.texture = NotLoaded;
+            AvatarImage.texture = TextureNotLoaded;
         }
-        
-        Text.text = parsedDialog.dialogue[currentIndex].text;
-        NameText.text = parsedDialog.dialogue[currentIndex].name;
-        UpdateLayout();
+    }
+    private void SetTexts()
+    {
+        DialogText.text = parsedDialogData.dialogue[currentIndex].text;
+        NameText.text = parsedDialogData.dialogue[currentIndex].name;
     }
 
     private void UpdateLayout()
     {
         var rTransA = AvatarBox;
-        var rTransT = Text.rectTransform;
+        var rTransT = DialogText.rectTransform;
+        
+        // Using rect transform magic, rather than setting up two variants in the scene/prefab.
+        // It's a matter of team preference, but for this, I preferred speed over readability.
         if (currentAvatar == null || currentAvatar.position == AvatarDefinition.Position.left)
         {
             rTransA.pivot = new Vector2(0, 1);
@@ -77,7 +91,7 @@ public class DialogPanel : MonoBehaviour
             rTransA.anchoredPosition = new Vector2(AvatarDistanceWall, rTransA.anchoredPosition.y);
             rTransT.offsetMin = new Vector2(TextDistanceWall + TextDistanceWallAvatarOffset, rTransT.offsetMin.y);
             rTransT.offsetMax = new Vector2(-TextDistanceWall, rTransT.offsetMax.y);
-            Text.alignment = TextAlignmentOptions.TopLeft;
+            DialogText.alignment = TextAlignmentOptions.TopLeft;
         }
         else
         {
@@ -87,7 +101,7 @@ public class DialogPanel : MonoBehaviour
             rTransA.anchoredPosition = new Vector2(-AvatarDistanceWall, rTransA.anchoredPosition.y);
             rTransT.offsetMin = new Vector2(TextDistanceWall, rTransT.offsetMin.y);
             rTransT.offsetMax = new Vector2(-TextDistanceWall - TextDistanceWallAvatarOffset, rTransT.offsetMax.y);
-            Text.alignment = TextAlignmentOptions.TopRight;
+            DialogText.alignment = TextAlignmentOptions.TopRight;
         }
     }
 

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
-using NUnit.Framework;
 using UnityEngine;
+
+
 namespace DefaultNamespace
 {
     public class Root : MonoBehaviour
@@ -9,6 +10,7 @@ namespace DefaultNamespace
         public Navigation Navigation;
         public RectTransform ScreensRoot;
         public List<AssignmentScreen> Screens;
+        
         public int StartIndex = 1; //The screen to show first
         
         private int currentIndex;
@@ -17,10 +19,14 @@ namespace DefaultNamespace
         AssignmentScreen Left => Screens[(currentIndex - 1).TrueModulo(Screens.Count)]; 
         AssignmentScreen Right => Screens[(currentIndex + 1).TrueModulo(Screens.Count)];
         AssignmentScreen Current => Screens[(currentIndex).TrueModulo(Screens.Count)];
+        
         void Awake()
         {
+            if (StartIndex >= Screens.Count || StartIndex <0)
+                Debug.LogError("StartIndex out of range");
+            
             currentIndex = StartIndex;
-            Assert.IsTrue(StartIndex < Screens.Count);
+            
             Navigation.leftPressed += () => MoveScreens(-1);
             Navigation.rightPressed += () => MoveScreens(1);
             Navigation.infoPressed += ShowScreenInfo;
@@ -32,7 +38,6 @@ namespace DefaultNamespace
             var text = Current.GetDescription();
 
             MessagePopup.Show(text);
-
         }
 
         private void MoveScreens(int direction)

@@ -47,7 +47,10 @@ public class CardsStacks : AssignmentScreen
         if (endReached)
         {
             await MessagePopup.Show("All the ladybugs have travelled to their other stack!\n\n" +
-                               " I guess this message is rather annoying, if you are currently looking at another task, but I believe this is fair after the amount of context switches I had to go through for all of this.");
+                               "I guess this message is rather annoying, if you are currently looking at another task." +
+                               "Well, maybe I have been interpreting the task on purpose like this, to pay back for all the context switching you made me go through. <sprite name=\"satisfied\">\n" +
+                               "\n" +
+                               "Also, wouldn't it look much gbetter with the counter under the stacks?");
             messageConfirmed?.Invoke();
         }
     }

@@ -25,6 +25,10 @@ public class MessagePopup : AnimationThingy
     
     private async Task ShowInternal(string text)
     {
+        Time.timeScale = 0; //Hacky way to pause the game, and also make sure, the card stacks don't attempt to open this popup on top.
+        //A real life scenario would need a better system, like a centralized pause manager or throwing if a second popup is to be opened
+        //or spawning a copy on top or establishing a queue... Not in our Singleton though! ;-)
+        //The cards task still pauses in a less aggressive way, even though that is redundant now,
         tcs = new TaskCompletionSource<bool>();
         gameObject.SetActive(true);
         CanvasGroup.blocksRaycasts = true;
@@ -51,5 +55,6 @@ public class MessagePopup : AnimationThingy
         CanvasGroup.blocksRaycasts = false;
         gameObject.SetActive(false);
         tcs.SetResult(true);
+        Time.timeScale = 1;
     }
 }

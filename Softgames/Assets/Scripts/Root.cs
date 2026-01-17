@@ -39,7 +39,8 @@ namespace DefaultNamespace
             var nextIndex = (currentIndex + direction).TrueModulo(Screens.Count);
             var target = Screens[nextIndex];
             
-            PrepareTarget(target, width);
+            SetSideScreenWidth(target.RectTransform, width); //For if the aspect ratio changed we read it only before moving.
+                                                             //A bit overkill I guess. But it helped debugging.
             Navigation.ScreenName.text = "";
           
             var targetPosition = new Vector3(width * -direction, 0, 0);
@@ -53,19 +54,13 @@ namespace DefaultNamespace
             });
         }
         
-        private void PrepareTarget(AssignmentScreen target, float width)
+        private void SetSideScreenWidth(RectTransform target, float width)
         {
-            target.gameObject.SetActive(true);
-            target.RectTransform.sizeDelta = new Vector2(width, target.RectTransform.sizeDelta.y); //For if the aspect ratio changed. A bit overkill I guess. But it helped debugging.
+            target.sizeDelta = new Vector2(width, target.sizeDelta.y); 
         }
 
         private void SetupScreens()
         {
-            for (int i = 0; i < Screens.Count; i++)
-            {
-                Screens[i].gameObject.SetActive(i == currentIndex);
-            }
-            
             PutLeft(Left.RectTransform);
             PutCenter(Current.RectTransform);
             PutRight(Right.RectTransform);
@@ -81,8 +76,11 @@ namespace DefaultNamespace
             target.anchorMin = Vector2.zero;
             target.anchorMax = new Vector2(0, 1);
             target.pivot = new Vector2(1, 0.5f);
+            SetSideScreenWidth(target, 10000);
         }
-        
+
+        //Give it some arbitrary width, so things are not overlapping in.
+
         /// <summary>
         /// Using rect transform anchors and pivot to attach the screen to the right of the frustum
         /// </summary>
@@ -91,6 +89,7 @@ namespace DefaultNamespace
             target.anchorMin = new Vector2(1, 0);
             target.anchorMax = Vector2.one;
             target.pivot = new Vector2(0, 0.5f);
+            SetSideScreenWidth(target, 10000);
         }
         
         /// <summary>

@@ -10,8 +10,6 @@ public class CardsStacks : AssignmentScreen
     
     public int CardAmount = 144;
     public Transform CardPrefab;
-    public Sprite CardSprite;
-    public float DistanceFromCamera = 1000;
     
     public Transform StackOne;
     public Transform StackTwo;
@@ -19,10 +17,9 @@ public class CardsStacks : AssignmentScreen
     public TMP_Text Counter1;
     public TMP_Text Counter2;
     
-    public float Padding = 200;
     public float RotationStep = -3;
     public float StackYStep = 2;
-    public MessagePopup Message;
+
     [DoNotSerialize]
     public List<Transform> Cards = new();
     
@@ -49,7 +46,7 @@ public class CardsStacks : AssignmentScreen
         
         if (endReached)
         {
-            await Message.Show("All the ladybugs have travelled to their other stack!\n\n" +
+            await MessagePopup.Show("All the ladybugs have travelled to their other stack!\n\n" +
                                " I guess this message is rather annoying, if you are currently looking at another task, but I believe this is fair after the amount of context switches I had to go through for all of this.");
             messageConfirmed?.Invoke();
         }

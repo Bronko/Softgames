@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -28,7 +29,7 @@ public class Dialog : AssignmentScreen
         await LoadJsonAsync();
     }
 
-    private bool debugFail = false;
+    public bool DebugFailFirst = false;
 
     private async Task LoadJsonAsync()
     {
@@ -41,16 +42,19 @@ public class Dialog : AssignmentScreen
 
         LoadingObj.SetActive(false);
 
-        if (debugFail || request.result != UnityWebRequest.Result.Success)
+        if (DebugFailFirst || request.result != UnityWebRequest.Result.Success)
         {
-            debugFail = false;
+            DebugFailFirst = false;
             NotLoadedPanel.SetActive(true);
         }
         else
         {
             DialogPanel.gameObject.SetActive(true);
             var json = request.downloadHandler.text;
-            var dialog = JsonConvert.DeserializeObject<MagicWords>(json);
+            var dialog = JsonConvert.DeserializeObject<MagicWords>(json, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
             DialogPanel.Display(dialog);
         }
     }
@@ -60,12 +64,12 @@ public class Dialog : AssignmentScreen
         return "Most of the magic happens directly after json deserialization" +
                "\n" +
                "These names and string formats are super arbitrary. In a real life scenario I would have a friendly" +
-               "word with design to actually use damn Unicode, after the assignment already even mentioned it. <sprite name =\"intrigued\">\n" +
+               "word with design to actually use damn Unicode, after the assignment already even mentioned it. <sprite name=\"intrigued\">\n" +
                "Depending on the actual use case and time constraints, I would go for a third party plugin," +
                "or dive deep to dynamically fill a system rendered emoji atlas. I have seen that done," +
                "but it took a year for the developer to remove all the kinks.\n" +
                "\n" +
-               "To improve: Use nicer emoji";
+               "To improve: Use nicer emoji. Those free ones are lame.";
     }
 }
 

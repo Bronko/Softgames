@@ -5,15 +5,12 @@ using UnityEngine.UI;
 
 public class Particles : AssignmentScreen
 {
-    [SerializeField] private ParticleSystem particleSystem;
-
     public Button ChangeButton;
     public ParticleChangeAnimationThingy ChangeAnimation;
     private void Awake()
     {
         ChangeButton.onClick.AddListener(ChangeAnimation.TriggerChange);
     }
-    
     public override string GetDescription()
     {
         return "So I will touch a lot of tech art? Cool!\n" +

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CardsStacks : AssignmentScreen
@@ -17,10 +16,12 @@ public class CardsStacks : AssignmentScreen
     public TMP_Text Counter1;
     public TMP_Text Counter2;
     
+    [Tooltip("Amount each card gets rotated, when stacked")]
     public float RotationStep = -3;
+    [Tooltip("Amount each card gets moved \"up\" when stacked")]
     public float StackYStep = 2;
 
-    [DoNotSerialize]
+    [NonSerialized]
     public List<Transform> Cards = new();
     
     
@@ -28,6 +29,14 @@ public class CardsStacks : AssignmentScreen
     {
         Counter1.text = CardAmount.ToString();
         Counter2.text = 0.ToString();
+        
+        InstantiateCards();
+        
+        CardPrefab.gameObject.SetActive(false);
+    }
+
+    private void InstantiateCards()
+    {
         for (int i = 0; i < CardAmount; i++)
         {
             var card = Instantiate(CardPrefab, StackOne);
@@ -35,7 +44,6 @@ public class CardsStacks : AssignmentScreen
             card.Rotate(Vector3.forward, RotationStep * i);
             card.transform.localPosition = new Vector3(0, StackYStep * i, -1 * i);
         }
-        CardPrefab.gameObject.SetActive(false);
     }
 
 

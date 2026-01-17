@@ -5,11 +5,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class AvatarDefinition
 {
-    public enum Position
+    public enum Positions
     {
         left,
         right
@@ -17,10 +18,10 @@ public class AvatarDefinition
 
     public event Action<Texture2D> avatarLoaded;
     
-    public string name;
-    public string url;
+    public string Name;
+    public string Url;
     [JsonConverter(typeof(StringEnumConverter))]
-    public Position position;
+    public Positions Position;
     
     public Texture2D Texture { get; private set; }
     private bool isLoading;
@@ -39,7 +40,7 @@ public class AvatarDefinition
         
         isLoading = true;
         
-        var request = UnityWebRequestTexture.GetTexture(url);
+        var request = UnityWebRequestTexture.GetTexture(Url);
         var operation = request.SendWebRequest();
 
         while (!request.isDone)

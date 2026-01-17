@@ -7,7 +7,6 @@ public class ParticleChangeAnimationThingy : AnimationThingy
     private static readonly string TriggerNext = "Next";
     
     private bool isAnimating;
-
     
     public void TriggerChange()
     {

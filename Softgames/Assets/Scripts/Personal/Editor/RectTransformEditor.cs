@@ -3,6 +3,11 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
+/// <ExplanationForTask>
+/// This is my messy editor script to help headaches with Unity canvas anchors.
+/// If you wondered, if my solutions contain AI code: Here it is. It's about two years old by now...
+/// AI doesn't hurt in editor script, unless you try to read it. Which hurts anyway. :D
+/// </ExplanationForTask>
 [CustomEditor(typeof(RectTransform), true)]
     public class RectTransformEditor : Editor
     {

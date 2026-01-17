@@ -14,12 +14,12 @@ public class DialogPanel : MonoBehaviour
     public Texture2D TextureNotLoaded;
     public TMP_Text DialogText;
     public TMP_Text NameText;
+    public Button ConfirmButton;
     
     private int currentIndex;
     private MagicWords parsedDialogData;
     private AvatarDefinition currentAvatar;
-    
-    public Button ConfirmButton;
+
 
     void Awake()
     {
@@ -27,7 +27,7 @@ public class DialogPanel : MonoBehaviour
     }
     private void OnConfirmed()
     {
-        currentIndex = (currentIndex + 1).TrueModulo(parsedDialogData.dialogue.Count);
+        currentIndex = (currentIndex + 1).TrueModulo(parsedDialogData.Dialogue.Count);
         ShowPage();
     }
 
@@ -50,7 +50,7 @@ public class DialogPanel : MonoBehaviour
 
     private void HandleAvatarData()
     {
-        if (parsedDialogData.Avatars.TryGetValue(parsedDialogData.dialogue[currentIndex].name, out var avatarDefinition))
+        if (parsedDialogData.AvatarDict.TryGetValue(parsedDialogData.Dialogue[currentIndex].name, out var avatarDefinition))
         {
             currentAvatar = avatarDefinition;
             if (currentAvatar.Texture == null)
@@ -65,15 +65,15 @@ public class DialogPanel : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"No avatar definition found for {parsedDialogData.dialogue[currentIndex].name}");
+            Debug.LogWarning($"No avatar definition found for {parsedDialogData.Dialogue[currentIndex].name}");
             currentAvatar = null;
             AvatarImage.texture = TextureNotLoaded;
         }
     }
     private void SetTexts()
     {
-        DialogText.text = parsedDialogData.dialogue[currentIndex].text;
-        NameText.text = parsedDialogData.dialogue[currentIndex].name;
+        DialogText.text = parsedDialogData.Dialogue[currentIndex].text;
+        NameText.text = parsedDialogData.Dialogue[currentIndex].name;
     }
 
     private void UpdateLayout()
@@ -83,7 +83,7 @@ public class DialogPanel : MonoBehaviour
         
         // Using rect transform magic, rather than setting up two variants in the scene/prefab.
         // It's a matter of team preference, but for this, I preferred speed over readability.
-        if (currentAvatar == null || currentAvatar.position == AvatarDefinition.Position.left)
+        if (currentAvatar == null || currentAvatar.Position == AvatarDefinition.Positions.left)
         {
             rTransA.pivot = new Vector2(0, 1);
             rTransA.anchorMin = new Vector2(0, rTransA.anchorMin.y);

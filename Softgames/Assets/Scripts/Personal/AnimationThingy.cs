@@ -5,34 +5,34 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-
-
-/// <ExplanationForDemo>
-///    This is a wrapper for animations, duplicating the API of the Unity animator system, to combine the usage of the Unity
+/// <ExplanationForTask>
+///    This is my wrapper for animations, duplicating the API of the Unity animator system, to combine the usage of the Unity
 ///    animator with own code driven solutions.
-///    It is also providing a callback for animation flows that are considered "finished" or alternatively awaitable async wrappers.
+///    Feel free to ignore the code here, and treat this as a black box,
+///    that takes care of animation callbacks, or making them awaitable, when used correctly. ;-)
+/// 
+///    As said, this is providing a callback API for animation flows that are considered "finished" or alternatively awaitable async wrappers.
 ///    The way to include own animation systems is to inherit from this class and override the "HandleXXX" methods.
 ///
 ///    This allows programmers to quickly set up an animation by code, and artists to override them by defining the parameters in the Unity animator.
-///    It is also possible to daisy chain dynamic code driven animations (up to triggering particle systems) with static animator calls.
+///    It is also possible to daisychain dynamic code driven animations with static animator calls.
 ///
-///    On the downside are some conventions for the definition of animation states when using the Unity animator.
-/// </explanationForDemo>
+///    On the downside are some conventions for the definition of animation states when using the Unity animator,
+///    and a mandatory onboarding.
+/// </ExplanationForTask>
 
 /// <summary>
-/// Here were links to the documentation
+/// Here were links to the visual documentation
 /// </summary>
 public class AnimationThingy : MonoBehaviour
 {
-
     protected const string ShowTrigger = "Show";
     protected const string HideTrigger = "Hide";
     private const string ResetTrigger = "Reset";
     private const string ShowBoolean = "IsShowing";
 
     protected Animator animator;
-
-
+    
     private HashSet<string> triggers = new();
     private Dictionary<string, bool> bools = new();
     private Dictionary<string, int> ints = new();

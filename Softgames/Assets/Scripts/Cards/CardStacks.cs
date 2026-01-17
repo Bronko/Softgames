@@ -54,4 +54,15 @@ public class CardsStacks : AssignmentScreen
             messageConfirmed?.Invoke();
         }
     }
+    public override string GetDescription()
+    {
+        return "Reading the name of the challenge again, I assume, you wanted to see me dealing with alpha blending?\n" +
+               "Sorry. This is too late now. I optimized the shader by making it cut out, and please note, I am not a shader specialist.\n" +
+               "In a real life scenario I would have consulted my peers.\n" +
+               "\n" +
+               "Honestly, I would have liked some provided assets, to save some time and headaches, while providing more clarity.\n"+
+               "\n" +
+               "Possible improvement: More steps in the animation, or creating a wrapper to allow different eases on Y and X, to make the cards travel a" +
+               "smoot curve. \n";
+    }
 }

@@ -68,7 +68,6 @@ public class CardStackAnimationThingy : AnimationThingy
         {
             var seq = DOTween.Sequence();
             var card = CardStacks.Cards[index];
-            var cardBasePos = card.transform.position;
             card.transform.SetParent(toStack, true);
             var targetLayer = iterationDirection < 0 ? (CardStacks.Cards.Count - 1 - index) : index;
             var endTargetZ = -targetLayer;

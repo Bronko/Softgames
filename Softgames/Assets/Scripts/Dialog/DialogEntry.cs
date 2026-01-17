@@ -11,11 +11,6 @@ public class DialogEntry
     [OnDeserialized]
     internal void OnDeserialized(StreamingContext context)
     {
-        //These names and string formats are super arbitrary. In a real life scenario I would have a friendly
-        //word with design to actually use damn Unicode, after the assignment already even mentioned it. :-)
-        //Depending on the actual use case and time constraints, I would go for a third party plugin,
-        //or dive deep to dynamically fill a system rendered emoji atlas. I have seen that done,
-        //but it took a year for the developer to remove all the kinks.
         var pattern = @"\{(.*?)\}";
         var replacement = "<sprite name=\"$1\">";
 

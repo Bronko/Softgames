@@ -13,4 +13,12 @@ public class Particles : AssignmentScreen
     {
         ChangeButton.onClick.AddListener(ChangeAnimation.TriggerChange);
     }
+    
+    public override string GetDescription()
+    {
+        return "So I will touch a lot of tech art? Cool!\n" +
+               "\n" +
+               "Always fun, how particle systems interact with the canvas, eh?\n" +
+               "Also fun, how some values cannot be touched by the animator.";
+    }
 }

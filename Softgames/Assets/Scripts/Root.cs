@@ -2,9 +2,6 @@
 using DG.Tweening;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-
 namespace DefaultNamespace
 {
     public class Root : MonoBehaviour
@@ -26,7 +23,16 @@ namespace DefaultNamespace
             Assert.IsTrue(StartIndex < Screens.Count);
             Navigation.leftPressed += () => MoveScreens(-1);
             Navigation.rightPressed += () => MoveScreens(1);
+            Navigation.infoPressed += ShowScreenInfo;
             SetupScreens();
+        }
+
+        private void ShowScreenInfo()
+        {
+            var text = Current.GetDescription();
+
+            MessagePopup.Show(text);
+
         }
 
         private void MoveScreens(int direction)

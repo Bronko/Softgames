@@ -12,17 +12,18 @@ namespace DefaultNamespace
         public Navigation Navigation;
         public RectTransform ScreensRoot;
         public int StartIndex = 1;
-        public CanvasScaler CanvasScaler;
         public List<AssignmentScreen> Screens;
         private int currentIndex;
         private bool isMoving;
+        AssignmentScreen Left => Screens[(currentIndex - 1).TrueModulo(Screens.Count)]; 
+        AssignmentScreen Right => Screens[(currentIndex + 1).TrueModulo(Screens.Count)];
+        AssignmentScreen Current => Screens[(currentIndex).TrueModulo(Screens.Count)];
         void Awake()
         {
             currentIndex = StartIndex;
             Assert.IsTrue(StartIndex < Screens.Count);
             Navigation.leftPressed += () => MoveScreens(-1);
             Navigation.rightPressed += () => MoveScreens(1);
-           // SetUpScreenMatch();
             SetupScreens();
         }
 
@@ -30,71 +31,57 @@ namespace DefaultNamespace
         {
             if (isMoving)
                 return;
-            var width = SetupScreens();
-            Navigation.ScreenName.text = "";
             isMoving = true;
-            var tween = ScreensRoot.DOLocalMove(new Vector3(width * -direction, 0, 0), 0.4f).SetEase(Ease.InOutSine);
+            
+            var width = (transform as RectTransform).rect.width;
+            var nextIndex = (currentIndex + direction).TrueModulo(Screens.Count);
+            var target = Screens[nextIndex];
+            
+            PrepareTarget(target, width);
+            Navigation.ScreenName.text = "";
+          
+            var targetPosition = new Vector3(width * -direction, 0, 0);
+            var tween = ScreensRoot.DOLocalMove(targetPosition, 0.4f).SetEase(Ease.InOutSine);
             tween.OnStepComplete(() =>
             {
-                SetupNewScreenOrder(direction);
+                currentIndex = nextIndex;
+                SetupScreens();
                 ScreensRoot.transform.localPosition = Vector3.zero;
                 isMoving = false;
             });
         }
-        private int TrueModulo(int a, int b)
+
+        private void PrepareTarget(AssignmentScreen target, float width)
         {
-            return ((a % b) + b) % b;
+            target.gameObject.SetActive(true);
+            target.RectTransform.sizeDelta = new Vector2(width, target.RectTransform.sizeDelta.y);
         }
 
-        private void SetupNewScreenOrder(int direction)
+        private void SetupScreens()
         {
-            currentIndex = TrueModulo(currentIndex + direction, Screens.Count);
-            SetupScreens();
-        }
-
-        private float SetupScreens()
-        {
-            var width = (transform as RectTransform).rect.width;
-            
-            var left = TrueModulo(currentIndex - 1, Screens.Count);
-            var right = TrueModulo(currentIndex + 1, Screens.Count);
             for (int i = 0; i < Screens.Count; i++)
             {
-                Screens[i].gameObject.SetActive(i == left || i == currentIndex || i == right);
+                Screens[i].gameObject.SetActive(i == currentIndex);
             }
             
-            PutLeft(Screens[left].RectTransform, width);
-            PutCenter(Screens[currentIndex].RectTransform);
-            PutRight(Screens[right].RectTransform, width);
+            PutLeft(Left.RectTransform);
+            PutCenter(Current.RectTransform);
+            PutRight(Right.RectTransform);
 
             Navigation.ScreenName.text = Screens[currentIndex].Name;
-            return width;
         }
-
-        private void SetUpScreenMatch()
-        {
-            if (Screen.width > Screen.height)
-                CanvasScaler.matchWidthOrHeight = 1;
-            else if (Screen.width < Screen.height)
-                CanvasScaler.matchWidthOrHeight = 0;
-            else
-                CanvasScaler.matchWidthOrHeight = 0.5f;
-        }
-
-        private void PutRight(RectTransform target, float width)
-        {
-            target.anchorMin = new Vector2(1, 0);
-            target.anchorMax = Vector2.one;
-            target.pivot = new Vector2(0, 0.5f);
-            target.sizeDelta = new Vector2(width, target.sizeDelta.y);
-        }
-
-        private void PutLeft(RectTransform target, float width)
+        
+        private void PutLeft(RectTransform target)
         {
             target.anchorMin = Vector2.zero;
             target.anchorMax = new Vector2(0, 1);
             target.pivot = new Vector2(1, 0.5f);
-            target.sizeDelta = new Vector2(width, target.sizeDelta.y);
+        }
+        private void PutRight(RectTransform target)
+        {
+            target.anchorMin = new Vector2(1, 0);
+            target.anchorMax = Vector2.one;
+            target.pivot = new Vector2(0, 0.5f);
         }
         
         private void PutCenter(RectTransform target)
@@ -104,10 +91,6 @@ namespace DefaultNamespace
             target.pivot = new Vector2(0.5f, 0.5f);
             target.sizeDelta = Vector2.zero;
         }
-
-        void Update()
-        {
-            //SetUpScreenMatch();
-        }
+        
     }
 }

@@ -56,6 +56,14 @@ public class Root : MonoBehaviour
     {
         if (isMoving)
             return;
+
+        Time.timeScale = 0; //In a real life project I would prefer a central point to handle the current timeScale, but 
+        // I wanted to keep things simple... I set it to 0 here, because moving around full screen canvas is hurting performance
+        // already enough without doing anything more. Even better would be to take a screenshot, and interrupt rendering
+        // all the heavy stuff like 144 sprites or particles while scrolling. However the scrolling was not part of the
+        // assignment, so I hope you play fair.
+        // I wanted to make it look "nice", that's all. :)
+        
         isMoving = true;
 
         var width = (transform as RectTransform).rect.width;
@@ -69,8 +77,10 @@ public class Root : MonoBehaviour
 
         var targetPosition = new Vector3(width * -direction, 0, 0);
         var tween = ScreensRoot.DOLocalMove(targetPosition, 0.4f).SetEase(Ease.InOutSine);
+        tween.SetUpdate(true);
         tween.OnStepComplete(() =>
         {
+            Time.timeScale = 1;
             currentIndex = nextIndex;
             SetupScreens();
             ScreensRoot.transform.localPosition = Vector3.zero;

@@ -71,7 +71,7 @@ public class CardsStacks : AssignmentScreen
                "Maybe some provided assets would have made things more clear. After all my first idea was to use a repeating filling of a 9-slice asset to simulate the stack, which I was told, is not the idea.\n"+
                "Well, now we will stick with the \"cutout\" sprite."+
                "\n" +
-               "Anyway, possible improvement: More steps in the animation, or creating a wrapper to allow different eases on Y and X, to make the cards travel a" +
-               "smooth curve.\n";
+               "Anyway, possible improvement: More steps in the animation, or creating a wrapper to allow different eases on Y and X, to make the cards travel on a " +
+               "smooth curve.";
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using DG.Tweening;
-using DG.Tweening.Plugins.Options;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CardStackAnimationThingy : AnimationThingy
@@ -24,10 +22,9 @@ public class CardStackAnimationThingy : AnimationThingy
     private int index;
     
     private Transform currentMovingCard;
-    protected override void Awake()
+    private Vector3 cachedLocalPosition;
+    void Start()
     {
-        base.Awake();
-
         BackgroundImageHandler.renderTextureResized += TakeStackSnapshot;
         
         CardStacks.messageConfirmed += () => isPaused = false;
@@ -35,7 +32,7 @@ public class CardStackAnimationThingy : AnimationThingy
         toStack = CardStacks.StackTwo;
         index = CardStacks.Cards.Count - 1;
     }
-    
+
     bool IsEndIndex()
     {
         return (iterationDirection < 0 && index <= 0) 
@@ -44,6 +41,8 @@ public class CardStackAnimationThingy : AnimationThingy
     
     void Update()
     {
+        if (currentMovingCard != null)
+            cachedLocalPosition = currentMovingCard.localPosition;
         if (isPaused)
             return;
         
@@ -84,12 +83,10 @@ public class CardStackAnimationThingy : AnimationThingy
             var endTargetZ = -targetLayer;
             var targetPos = new Vector3(0, CardStacks.StackYStep * targetLayer, -200);
             var rotateByEulers = new Vector3(0, 0, CardStacks.RotationStep * iterationDirection);
-            var startLocalPos = currentMovingCard.localPosition;
-            
-            seq.Append(currentMovingCard.DOBlendableLocalMoveBy(toStack.InverseTransformPoint(MoveUpTarget.position) - startLocalPos, SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Append(currentMovingCard.DOLocalMove(toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(currentMovingCard.DOScale(2f, SequenceStepTime)).SetEase(Ease.InOutSine);
             
-            seq.Append(currentMovingCard.DOBlendableLocalMoveBy(targetPos - toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Append(currentMovingCard.DOLocalMove(targetPos, SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(currentMovingCard.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InSine);
             seq.Join(currentMovingCard.DOLocalRotate(rotateByEulers, SequenceStepTime,  RotateMode.LocalAxisAdd)).SetEase(Ease.InSine);
             

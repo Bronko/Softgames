@@ -24,7 +24,6 @@ public class CardsStacks : AssignmentScreen
     [NonSerialized]
     public List<Transform> Cards = new();
     
-    
     void Awake()
     {
         Counter1.text = CardAmount.ToString();

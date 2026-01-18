@@ -16,6 +16,7 @@ public class Root : MonoBehaviour
 
     private int currentIndex;
     private bool isMoving;
+    private float canvasWidth;
 
     AssignmentScreen Left => Screens[(currentIndex - 1).TrueModulo(Screens.Count)];
     AssignmentScreen Right => Screens[(currentIndex + 1).TrueModulo(Screens.Count)];
@@ -33,6 +34,7 @@ public class Root : MonoBehaviour
         Navigation.leftPressed += () => MoveScreens(-1);
         Navigation.rightPressed += () => MoveScreens(1);
         Navigation.infoPressed += ShowScreenInfo;
+        
         SetupScreens();
     }
 
@@ -63,17 +65,12 @@ public class Root : MonoBehaviour
         // assignment anyway.
         
         isMoving = true;
-
-        var width = (transform as RectTransform).rect.width;
+        
         var nextIndex = (currentIndex + direction).TrueModulo(Screens.Count);
-        var target = Screens[nextIndex];
-
-        SetSideScreenWidth(target.RectTransform,
-            width); //For if the aspect ratio changed we read it only before moving.
-        //A bit overkill I guess. But it helped debugging.
+        
         Navigation.ScreenName.text = "";
 
-        var targetPosition = new Vector3(width * -direction, 0, 0);
+        var targetPosition = new Vector3(canvasWidth * -direction, 0, 0);
         var tween = ScreensRoot.DOLocalMove(targetPosition, 0.4f).SetEase(Ease.InOutSine);
         tween.SetUpdate(true);
         tween.OnStepComplete(() =>
@@ -84,11 +81,6 @@ public class Root : MonoBehaviour
             ScreensRoot.transform.localPosition = Vector3.zero;
             isMoving = false;
         });
-    }
-
-    private void SetSideScreenWidth(RectTransform target, float width)
-    {
-        target.sizeDelta = new Vector2(width, target.sizeDelta.y);
     }
 
     private void SetupScreens()
@@ -108,7 +100,7 @@ public class Root : MonoBehaviour
         target.anchorMin = Vector2.zero;
         target.anchorMax = new Vector2(0, 1);
         target.pivot = new Vector2(1, 0.5f);
-        SetSideScreenWidth(target, 10000);
+        target.sizeDelta = new Vector2(canvasWidth, target.sizeDelta.y);
     }
     
     /// <summary>
@@ -119,7 +111,7 @@ public class Root : MonoBehaviour
         target.anchorMin = new Vector2(1, 0);
         target.anchorMax = Vector2.one;
         target.pivot = new Vector2(0, 0.5f);
-        SetSideScreenWidth(target, 10000);
+        target.sizeDelta = new Vector2(canvasWidth, target.sizeDelta.y);
     }
 
     /// <summary>
@@ -131,5 +123,22 @@ public class Root : MonoBehaviour
         target.anchorMax = Vector2.one;
         target.pivot = new Vector2(0.5f, 0.5f);
         target.sizeDelta = Vector2.zero;
+    }
+
+    void Update()
+    {
+        UpdateCanvasWidth();
+    }
+
+    private void UpdateCanvasWidth()
+    {
+        var oldWidth = canvasWidth;
+        canvasWidth = (transform as RectTransform).rect.width;
+        
+        if (!Mathf.Approximately(canvasWidth, oldWidth))
+        {
+            Left.RectTransform.sizeDelta = new Vector2(canvasWidth, Left.RectTransform.sizeDelta.y);
+            Right.RectTransform.sizeDelta = new Vector2(canvasWidth, Left.RectTransform.sizeDelta.y);
+        }
     }
 }

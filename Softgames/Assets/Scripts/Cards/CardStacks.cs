@@ -55,22 +55,21 @@ public class CardsStacks : AssignmentScreen
         if (endReached)
         {
             await MessagePopup.Show("All the ladybugs have travelled to their other stack!\n\n" +
-                               "I guess this message is rather annoying, if you are currently looking at another task." +
-                               "Well, maybe I have been interpreting the task on purpose like this, to pay back for all the context switching you made me go through. <sprite name=\"satisfied\">\n" +
-                               "\n" +
-                               "Also, wouldn't it look much gbetter with the counter under the stacks?");
+                                    "I guess this message is rather annoying, if you are currently looking at another task. " +
+                                    "Yeah, maybe I did interpret it like this on purpose. <sprite name=\"satisfied\">\n\n" +
+                                    "Also, wouldn't it look much better with the counters under the stacks?");
             messageConfirmed?.Invoke();
         }
     }
     public override string GetDescription()
     {
         return "Reading the name of the challenge again, I assume, you wanted to see me dealing with alpha blending?\n" +
-               "Sorry. This is too late now. I optimized the shader by making it cut out, and please note, I am not a shader specialist.\n" +
+               "Sorry. This is too late now. I optimized the shader by making it cut out, and please note, I am not a shader specialist. <sprite name=\"laughing\">\n" +
                "In a real life scenario I would have consulted my peers.\n" +
                "\n" +
-               "Honestly, I would have liked some provided assets, to save some time and headaches, while providing more clarity.\n"+
+               "Maybe some provided assets would have made things more clear. After all my first idea was to use a repeating filling of a 9-slice asset to simulate the stack, which I was told, is not the idea.\n"+
                "\n" +
-               "Possible improvement: More steps in the animation, or creating a wrapper to allow different eases on Y and X, to make the cards travel a" +
-               "smoot curve. \n";
+               "Anyway, possible improvement: More steps in the animation, or creating a wrapper to allow different eases on Y and X, to make the cards travel a" +
+               "smooth curve.\n If actually using alpha blending, check out, if it hits performance really as hard as it sounds. If yes, find workarounds, like rendering to a RenderTexture, while nothing is moving.";
     }
 }

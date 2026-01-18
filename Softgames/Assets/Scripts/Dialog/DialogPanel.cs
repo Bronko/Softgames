@@ -50,7 +50,7 @@ public class DialogPanel : MonoBehaviour
 
     private void HandleAvatarData()
     {
-        if (parsedDialogData.AvatarDict.TryGetValue(parsedDialogData.Dialogue[currentIndex].name, out var avatarDefinition))
+        if (parsedDialogData.AvatarDict.TryGetValue(parsedDialogData.Dialogue[currentIndex].Name, out var avatarDefinition))
         {
             currentAvatar = avatarDefinition;
             if (currentAvatar.Texture == null)
@@ -65,15 +65,15 @@ public class DialogPanel : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"No avatar definition found for {parsedDialogData.Dialogue[currentIndex].name}");
+            Debug.LogWarning($"No avatar definition found for {parsedDialogData.Dialogue[currentIndex].Name}");
             currentAvatar = null;
             AvatarImage.texture = TextureNotLoaded;
         }
     }
     private void SetTexts()
     {
-        DialogText.text = parsedDialogData.Dialogue[currentIndex].text;
-        NameText.text = parsedDialogData.Dialogue[currentIndex].name;
+        DialogText.text = parsedDialogData.Dialogue[currentIndex].Text;
+        NameText.text = parsedDialogData.Dialogue[currentIndex].Name;
     }
 
     private void UpdateLayout()

@@ -130,6 +130,9 @@ public class Root : MonoBehaviour
         UpdateCanvasWidth();
     }
 
+    /// <summary>
+    /// To deal with shifting screen ratios while playing. A bit overkill, but helped debugging.
+    /// </summary>
     private void UpdateCanvasWidth()
     {
         var oldWidth = canvasWidth;

@@ -7,9 +7,8 @@ using UnityEngine;
 
 /// <ExplanationForTask>
 ///    This is my wrapper for animations, duplicating the API of the Unity animator system, to combine the usage of the Unity
-///    animator with own code driven solutions.
-///    Feel free to ignore the code here, and treat this as a black box,
-///    that takes care of animation callbacks, or making them awaitable, when used correctly. ;-)
+///    animators with their own code driven solutions, and adding a wrapper for async tasks or callbacks.
+///    Feel free to ignore the code here, and treat this as a black box.
 /// 
 ///    As said, this is providing a callback API for animation flows that are considered "finished" or alternatively awaitable async wrappers.
 ///    The way to include own animation systems is to inherit from this class and override the "HandleXXX" methods.
@@ -18,8 +17,9 @@ using UnityEngine;
 ///    It is also possible to daisychain dynamic code driven animations with static animator calls.
 ///
 ///    On the downside are some conventions for the definition of animation states when using the Unity animator,
-///    and a mandatory onboarding.
+///    and mandatory onboarding.
 /// </ExplanationForTask>
+
 
 /// <summary>
 /// Here were links to the visual documentation

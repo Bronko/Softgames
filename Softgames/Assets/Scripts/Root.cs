@@ -102,9 +102,7 @@ public class Root : MonoBehaviour
         target.pivot = new Vector2(1, 0.5f);
         SetSideScreenWidth(target, 10000);
     }
-
-    //Give it some arbitrary width, so things are not overlapping in.
-
+    
     /// <summary>
     /// Using rect transform anchors and pivot to attach the screen to the right of the frustum
     /// </summary>

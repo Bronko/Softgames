@@ -84,11 +84,12 @@ public class CardStackAnimationThingy : AnimationThingy
             var endTargetZ = -targetLayer;
             var targetPos = new Vector3(0, CardStacks.StackYStep * targetLayer, -200);
             var rotateByEulers = new Vector3(0, 0, CardStacks.RotationStep * iterationDirection);
+            var startLocalPos = currentMovingCard.localPosition;
             
-            seq.Append(currentMovingCard.DOLocalMove(toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Append(currentMovingCard.DOBlendableLocalMoveBy(toStack.InverseTransformPoint(MoveUpTarget.position) - startLocalPos, SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(currentMovingCard.DOScale(2f, SequenceStepTime)).SetEase(Ease.InOutSine);
             
-            seq.Append(currentMovingCard.DOLocalMove(targetPos, SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Append(currentMovingCard.DOBlendableLocalMoveBy(targetPos - toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
             seq.Join(currentMovingCard.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InSine);
             seq.Join(currentMovingCard.DOLocalRotate(rotateByEulers, SequenceStepTime,  RotateMode.LocalAxisAdd)).SetEase(Ease.InSine);
             

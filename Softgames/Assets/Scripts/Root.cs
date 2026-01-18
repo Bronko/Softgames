@@ -59,10 +59,8 @@ public class Root : MonoBehaviour
 
         Time.timeScale = 0; //In a real life project I would prefer a central point to handle the current timeScale, but 
         // I wanted to keep things simple... I set it to 0 here, because moving around full screen canvas is hurting performance
-        // already enough without doing anything more. Even better would be to take a screenshot, and interrupt rendering
-        // all the heavy stuff like 144 sprites or particles while scrolling. However the scrolling was not part of the
-        // assignment, so I hope you play fair.
-        // I wanted to make it look "nice", that's all. :)
+        // already enough without doing anything additionally. The scrolling was not part of the
+        // assignment anyway.
         
         isMoving = true;
 

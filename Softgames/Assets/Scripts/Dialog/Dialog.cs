@@ -63,14 +63,19 @@ public class Dialog : AssignmentScreen
             catch (Exception e)
             {
                 Debug.LogWarning($"Json parsing error {(e.InnerException != null ? e.InnerException.Message : e.Message)}");
-                MessagePopup.Show("Ooops! Retrieving your dialog data didn't work out this time. Please try again later. \n" +
-                                  "Did I say \"retrieving\"? I lied. It was totally retrieved, but we broke something. <sprite name=\"satisfied\">\n" +
-                                  "But we would never actually admit it user facing like this now, would we? \n" +
-                                  "\n" + 
-                                  "Don't worry, I know how easily something like this can get shipped. I will not be like " +
-                                  "this in project code, promise.^^");
+                ShowParsingError();
             }
         }
+    }
+
+    private async void ShowParsingError()
+    {
+        await MessagePopup.Show("Ooops! Retrieving your dialog data didn't work out this time. Please try again later. \n" +
+                          "Did I say \"retrieving\"? I lied. It was totally retrieved, but we broke something. <sprite name=\"satisfied\">\n" +
+                          "But we would never actually admit it user facing like this now, would we? \n" +
+                          "\n" + 
+                          "Don't worry, I know how easily something like this can get shipped. I will not be like " +
+                          "this in project code, promise.^^");
     }
 
     public override string GetDescription()

@@ -1,16 +1,19 @@
 ﻿using System;
 using DG.Tweening;
 using DG.Tweening.Plugins.Options;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CardStackAnimationThingy : AnimationThingy
 {
     private static readonly string CardTrigger = "Go";
-
+    
     public float SequenceStepTime;
+    
     public CardsStacks CardStacks;
     [Tooltip("The position, each card travels up to, before moving to the other stack")]
     public Transform MoveUpTarget;
+    public BackgroundImageHandler BackgroundImageHandler;
     
     private Transform fromStack;
     private Transform toStack;
@@ -18,12 +21,15 @@ public class CardStackAnimationThingy : AnimationThingy
     private float timePassed;
     private bool isPaused;
     private int iterationDirection = -1;
-    
     private int index;
-
-    protected void Awake()
+    
+    private Transform currentMovingCard;
+    protected override void Awake()
     {
-        base.Awake();   
+        base.Awake();
+
+        BackgroundImageHandler.renderTextureResized += TakeStackSnapshot;
+        
         CardStacks.messageConfirmed += () => isPaused = false;
         fromStack = CardStacks.StackOne;
         toStack = CardStacks.StackTwo;
@@ -59,7 +65,6 @@ public class CardStackAnimationThingy : AnimationThingy
                 index += iterationDirection;
         }
     }
-
     private void SwapTargets()
     {
         iterationDirection *= -1;
@@ -70,24 +75,44 @@ public class CardStackAnimationThingy : AnimationThingy
     {
         if (name == CardTrigger)
         {
+            currentMovingCard = CardStacks.Cards[index];
+            currentMovingCard.transform.SetParent(toStack, true);
+            TakeStackSnapshot();
+            currentMovingCard.gameObject.SetActive(true);
             var seq = DOTween.Sequence();
-            var card = CardStacks.Cards[index];
-            card.transform.SetParent(toStack, true);
             var targetLayer = iterationDirection < 0 ? (CardStacks.Cards.Count - 1 - index) : index;
             var endTargetZ = -targetLayer;
             var targetPos = new Vector3(0, CardStacks.StackYStep * targetLayer, -200);
             var rotateByEulers = new Vector3(0, 0, CardStacks.RotationStep * iterationDirection);
             
-            seq.Append(card.DOLocalMove(toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
-            seq.Join(card.DOScale(2f, SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Append(currentMovingCard.DOLocalMove(toStack.InverseTransformPoint(MoveUpTarget.position), SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Join(currentMovingCard.DOScale(2f, SequenceStepTime)).SetEase(Ease.InOutSine);
             
-            seq.Append(card.DOLocalMove(targetPos, SequenceStepTime)).SetEase(Ease.InOutSine);
-            seq.Join(card.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InSine);
-            seq.Join(card.DOLocalRotate(rotateByEulers, SequenceStepTime,  RotateMode.LocalAxisAdd)).SetEase(Ease.InSine);
+            seq.Append(currentMovingCard.DOLocalMove(targetPos, SequenceStepTime)).SetEase(Ease.InOutSine);
+            seq.Join(currentMovingCard.DOScale(1.0f, SequenceStepTime)).SetEase(Ease.InSine);
+            seq.Join(currentMovingCard.DOLocalRotate(rotateByEulers, SequenceStepTime,  RotateMode.LocalAxisAdd)).SetEase(Ease.InSine);
             
-            seq.AppendCallback(() => card.localPosition = new Vector3(targetPos.x, targetPos.y, endTargetZ));
+            seq.AppendCallback(() =>
+            {
+                currentMovingCard.localPosition = new Vector3(targetPos.x, targetPos.y, endTargetZ);
+                currentMovingCard = null;
+                TakeStackSnapshot();
+            });
             
             AddTween(seq, callback);
+        }
+    }
+
+    private void TakeStackSnapshot()
+    {
+        foreach (var card in CardStacks.Cards)
+        {
+            card.gameObject.SetActive(card != currentMovingCard);
+        }
+        BackgroundImageHandler.TakeStackSnapshot();
+        foreach (var card in CardStacks.Cards)
+        {
+            card.gameObject.SetActive(card == currentMovingCard);
         }
     }
 }

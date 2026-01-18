@@ -64,6 +64,7 @@
 				productVersion: "{{{ PRODUCT_VERSION }}}",
 				autoSyncPersistentDataPath: true,
 			};
+			//config.devicePixelRatio = 1;
 			var scaleToFit;
 			try {
 				scaleToFit = !!JSON.parse("{{{ SCALE_TO_FIT }}}");
@@ -83,13 +84,6 @@
 				if (scaleToFit) {
 					w = window.innerWidth;
 					h = window.innerHeight;
-
-					var r = {{{ HEIGHT }}} / {{{ WIDTH }}};
-
-					if (w * r > window.innerHeight) {
-						w = Math.min(w, Math.ceil(h / r));
-					}
-					h = Math.floor(w * r);
 				} else {
 					w = {{{ WIDTH }}};
 					h = {{{ HEIGHT }}};

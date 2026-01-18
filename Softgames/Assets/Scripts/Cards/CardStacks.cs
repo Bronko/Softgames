@@ -64,12 +64,14 @@ public class CardsStacks : AssignmentScreen
     public override string GetDescription()
     {
         return "Reading the name of the challenge again, I assume, you wanted to see me dealing with alpha blending?\n" +
-               "Sorry. This is too late now. I optimized the shader by making it cut out, and please note, I am not a shader specialist. <sprite name=\"laughing\">\n" +
-               "In a real life scenario I would have consulted my peers.\n" +
+               "And I tried to optimize with a shader by making it cut out and write to depth.\n" +
+               "Please note, I am not a shader specialist. <sprite name=\"laughing\">. So, well, it didn't work. I guess, batching and depth sorting together can't happen? \n" +
+               "In a real life scenario I would have consulted my peers for this.\n" +
                "\n" +
                "Maybe some provided assets would have made things more clear. After all my first idea was to use a repeating filling of a 9-slice asset to simulate the stack, which I was told, is not the idea.\n"+
+               "Well, now we will stick with the \"cutout\" sprite."+
                "\n" +
                "Anyway, possible improvement: More steps in the animation, or creating a wrapper to allow different eases on Y and X, to make the cards travel a" +
-               "smooth curve.\n If actually using alpha blending, check out, if it hits performance really as hard as it sounds. If yes, find workarounds, like rendering to a RenderTexture, while nothing is moving.";
+               "smooth curve.\n";
     }
 }

@@ -49,7 +49,7 @@ public class BackgroundImageHandler : MonoBehaviour
         var cacheSize = rTrans.sizeDelta;
         var cacheIndex = rTrans.GetSiblingIndex();
         
-        MoveForScreenshot(Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, rTrans.childCount -1);
+        MoveForSnapshot(Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, rTrans.childCount -1);
         
         mainCam.cullingMask = LayerMask.GetMask(CardLayer);
         mainCam.targetTexture = bGBufferTexture;
@@ -59,10 +59,10 @@ public class BackgroundImageHandler : MonoBehaviour
         mainCam.targetTexture = null;
         mainCam.cullingMask = -1;
 
-        MoveForScreenshot(cacheMin, cacheMax, cachePivot, cacheSize, cacheIndex);
+        MoveForSnapshot(cacheMin, cacheMax, cachePivot, cacheSize, cacheIndex);
     }
 
-    private void MoveForScreenshot(Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 sizeDelta, int siblingIndex)
+    private void MoveForSnapshot(Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 sizeDelta, int siblingIndex)
     {
         rTrans.anchorMin = anchorMin;
         rTrans.anchorMax = anchorMax;

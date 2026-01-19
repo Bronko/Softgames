@@ -19,7 +19,7 @@ public class FPSCounter : MonoBehaviour
             var fps = frames / elapsedTime;
             frames = 0;
             elapsedTime = 0f;
-            FPSText.text = $"FPS:\n{(int)fps}";
+            FPSText.text = $"FPS:\n{Mathf.RoundToInt(fps)}";
         }
     }
 }
